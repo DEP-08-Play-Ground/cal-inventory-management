@@ -53,4 +53,9 @@ public class ItemsController {
         itemService.deleteItem(itemCode);
     }
 
+    @GetMapping(value = "/get/category/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ItemDTO> getItemByCategory(@PathVariable String category) {
+        return itemService.getItemByCategory(category);
+    }
+
 }

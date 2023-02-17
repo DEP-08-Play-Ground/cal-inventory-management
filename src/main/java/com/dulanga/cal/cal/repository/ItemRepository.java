@@ -20,4 +20,6 @@ public interface ItemRepository extends CrudRepository<Item, Integer> {
 
     Item findItemByItemCode(String itemCode);
 
+    List<Item> findItemByItemCategory(String itemCategory);
+
 }

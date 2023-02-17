@@ -32,6 +32,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDTO createItem(ItemDTO item) {
         Item savedItem = itemRepository.save(transformer.getItemEntity(item));
         if (savedItem == null) {
+            log.error("Can Not Create the Item!");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Can Not Create the Item!");
         }
         return transformer.getItemDTO(savedItem);
@@ -47,6 +48,7 @@ public class ItemServiceImpl implements ItemService {
     public void updateItem(ItemDTO itemDTO) {
         Optional<Item> itemByItemCode = itemRepository.getItemByItemCode(itemDTO.getItemCode());
         if (!itemByItemCode.isPresent()) {
+            log.error("Can Not Find the Item!");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can Not Find the Item!");
         }
         Item item = itemByItemCode.get();
@@ -60,8 +62,14 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItem(String itemCode) {
         Item itemByItemCode = itemRepository.findItemByItemCode(itemCode);
         if (itemByItemCode == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Item Code");
+            log.error("Invalid Item Code!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Item Code!");
         }
-        Integer itemId = itemRepository.deleteItemByItemCode(itemCode);
+        itemRepository.deleteItemByItemCode(itemCode);
+    }
+
+    @Override
+    public List<ItemDTO> getItemByCategory(String category) {
+        return itemRepository.findItemByItemCategory(category).stream().map(item -> transformer.getItemDTO(item)).collect(Collectors.toList());
     }
 }

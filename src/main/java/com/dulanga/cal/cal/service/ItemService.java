@@ -10,4 +10,6 @@ public interface ItemService {
 
     void updateItem(ItemDTO itemDTO);
     void deleteItem(String itemCode);
+
+    List<ItemDTO> getItemByCategory(String category);
 }
